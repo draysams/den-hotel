@@ -9,6 +9,8 @@ import com.draysams.denhotel.data.entity.Room;
 import com.draysams.denhotel.data.repository.GuestRepository;
 import com.draysams.denhotel.data.repository.ReservationRepository;
 import com.draysams.denhotel.data.repository.RoomRepository;
+import com.draysams.denhotel.service.RoomReservationService;
+import com.draysams.denhotel.service.model.RoomReservation;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -18,27 +20,19 @@ public class CLRunner implements CommandLineRunner {
 	private final RoomRepository roomRepository;
 	private final ReservationRepository reservationRepository;
 	private final GuestRepository guestRepository;
+	private final RoomReservationService roomReservationService;
 	
-	public CLRunner(RoomRepository roomRepository, GuestRepository guestRepository, ReservationRepository reservationRepository) {
+	public CLRunner(RoomRepository roomRepository, GuestRepository guestRepository, ReservationRepository reservationRepository, RoomReservationService roomReservationService) {
 		this.roomRepository = roomRepository;
 		this.reservationRepository = reservationRepository;
 		this.guestRepository = guestRepository;
+		this.roomReservationService = roomReservationService;
 	}
 	
 	@Override
 	public void run(String... args) throws Exception {
-		List<Room> rooms = this.roomRepository.findAll();
-		Optional<Room> room = this.roomRepository.findByRoomNumberIgnoreCase("p1");
-		System.out.println(room);
-		rooms.forEach(System.out::println);
-		
-		System.out.println("**** GUESTS ****");
-		List<Guest> guests = this.guestRepository.findAll();
-		guests.forEach(System.out::println);
-		
-		System.out.println("**** RESERVATIONS****");
-		List<Reservation> reservations = this.reservationRepository.findAll();
-		reservations.forEach(System.out::println);
- 	}
+		List<RoomReservation> reservations = this.roomReservationService.getRoomReservationsForDate("2023-08-28");
+ 		reservations.forEach(System.out::println);
+	}
 }
 
